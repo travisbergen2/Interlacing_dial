@@ -1,0 +1,45 @@
+max |Im Z|/|Z| at test points = 1.67e-17  (must be ~1e-15)
+grid of 1101 points computed
+
+ordinate      which L-function vanishes there      interlacing
+  160.8002   chi                                      
+  161.6912   chi                                      <-- two in a row: interlacing FAILS between 160.800 and 161.691
+  162.1411   chibar                                   
+  162.9217   chi                                      
+  163.4496   chibar                                   
+  164.0994   chi                                      
+  164.3689   chibar                                   
+  165.5774   chibar                                   <-- two in a row: interlacing FAILS between 164.369 and 165.577
+  166.3648   chibar                                   <-- two in a row: interlacing FAILS between 165.577 and 166.365
+  166.3995   chi                                      
+  167.2600   chi                                      <-- two in a row: interlacing FAILS between 166.399 and 167.260
+  168.2839   chibar                                   
+  168.3827   chi                                      
+  169.1601   chibar                                   
+  169.6180   chi                                      
+  170.9833   chi                                      <-- two in a row: interlacing FAILS between 169.618 and 170.983
+  171.0850   chibar                                   
+  171.9077   chibar                                   <-- two in a row: interlacing FAILS between 171.085 and 171.908
+  172.1701   chi                                      
+  173.1722   chi                                      <-- two in a row: interlacing FAILS between 172.170 and 173.172
+  173.5447   chibar                                   
+  174.5301   chi                                      
+  174.8376   chibar                                   
+  175.5987   chibar                                   <-- two in a row: interlacing FAILS between 174.838 and 175.599
+  176.7024   chibar                                   <-- two in a row: interlacing FAILS between 175.599 and 176.702
+  176.8406   chi                                      
+  177.2295   chi                                      <-- two in a row: interlacing FAILS between 176.841 and 177.230
+  177.9686   chibar                                   
+  178.9884   chi                                      
+  179.4514   chi                                      <-- two in a row: interlacing FAILS between 178.988 and 179.451
+  180.0893   chibar                                   
+  180.6951   chi                                      
+  181.3799   chibar                                   
+
+interlacing failures in [160.0, 182.0]: [(160.800233549644, 161.6911698612531), (164.36887393957457, 165.5773535055282), (165.5773535055282, 166.36484469494536), (166.39949818515242, 167.25998481480508), (169.61798482294685, 170.98331615430286), (171.0849877496664, 171.90770421384585), (172.17008851874698, 173.17219013106862), (174.83762228675138, 175.59872936525068), (175.59872936525068, 176.70244305823107), (176.84062696264846, 177.22953217159113), (178.988406381983, 179.45137156326393)]
+on-line zeros of the EVEN D-H function (Z_chi(t)+Z_chi(-t)): [160.0412, 162.0343, 163.1749, 164.1623, 168.3242, 169.3303, 171.0405, 172.021, 173.359, 174.6014, 178.1699, 179.9591, 180.9565]
+on-line zeros of the ODD  D-H function (Z_chi(t)-Z_chi(-t)): [162.3381, 163.9899, 166.3859, 168.1505, 168.7903, 174.3778, 176.7592, 177.7559, 180.2852]
+
+at the off-line ordinate t = 166.479306: |Z_chi(t)| = 5.24695e-57, |Z_chi(-t)| = 6.01824e-57, ratio = 0.871842
+equal-amplitude crossings |Z_chi(t)| = |Z_chi(-t)| in the window: [160.05, 162.03, 162.33, 163.17, 163.99, 164.17, 166.39, 168.15, 168.33, 168.79, 169.33, 171.05, 172.03, 173.35, 174.37, 174.61, 176.75, 177.75, 178.17, 179.95, 180.29, 180.95]
+done
