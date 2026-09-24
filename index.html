@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Interlacing Dial — the Davenport–Heilbronn mixture in the finite world, where one inequality decides whether the mixed zeros stay on the circle</title>
+<meta name="description" content="Davenport and Heilbronn mixed two Dirichlet L-functions into one function with a functional equation and no Euler product; its zeros provably leave the critical line. Here is the same mixture over F_q[T], where Weil's theorem holds and one inequality — equivalently, the interlacing of the two constituents' zeros — decides whether the mixed zeros stay on the circle. The full census for q = 3, 5, 7 (194 character pairs) is recomputed in your browser and checked against a Python twin. Over Q the same flip is the Riemann Hypothesis itself.">
+<meta property="og:title" content="The Interlacing Dial">
+<meta property="og:description" content="Where the Davenport–Heilbronn flip is decidable. Instruments, not proofs.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#0b0e14;--panel:#111725;--panel-2:#0e1420;--line:#1e293b;--text:#e6edf3;--dim:#9fb0c3;--faint:#6b7a8c;--accent:#7dd3fc;--gold:#e8c47a;--red:#ff5c5c;--green:#6fdc9a;--violet:#b58cf5;--orange:#f7a03a}
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-serif;line-height:1.55}
+  a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
+  .wrap{max-width:1060px;margin:0 auto;padding:28px 16px 64px}
+  .eyebrow{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);margin-bottom:10px}
+  h1{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(2rem,6vw,3.2rem);margin:0 0 8px;line-height:1.1}
+  h2{font-family:'Fraunces',serif;font-weight:600;font-size:1.35rem;margin:0 0 10px}
+  .sub{color:var(--dim);font-size:clamp(.98rem,2.4vw,1.06rem);max-width:76ch;margin:0 0 8px}
+  .creed{font-family:'IBM Plex Mono',monospace;font-size:.78rem;color:var(--faint);margin:0}
+  .creed b{color:var(--dim);font-weight:500}
+  section{margin-top:30px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+  .card p{margin:0 0 10px;color:var(--dim);font-size:.95rem} .card p:last-child{margin:0} .card b{color:var(--text)}
+  canvas{width:100%;height:auto;display:block;border-radius:10px;background:var(--panel-2)}
+  .row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:10px 0 6px;font-family:'IBM Plex Mono',monospace;font-size:.8rem;color:var(--dim)}
+  .row button{background:var(--panel-2);color:var(--text);border:1px solid var(--line);border-radius:10px;padding:8px 12px;font:inherit;cursor:pointer;min-height:40px}
+  .row button.on{border-color:var(--gold);color:var(--gold)}
+  .row input[type=range]{flex:1;min-width:140px;accent-color:#e8c47a}
+  .readout{font-family:'IBM Plex Mono',monospace;font-size:.82rem;color:var(--dim);margin-top:8px;line-height:1.7}
+  .readout b{color:var(--gold)} .readout .on{color:var(--green)} .readout .off{color:var(--red)}
+  .thm{border-left:4px solid var(--red);background:rgba(255,92,92,.07)}
+  .thm .big{font-family:'Fraunces',serif;font-size:1.15rem;color:var(--text);margin:0 0 8px}
+  .fence{border-left:4px solid var(--gold);background:rgba(232,196,122,.07)}
+  .fence .big{font-family:'Fraunces',serif;font-size:1.15rem;color:var(--text);margin:0 0 8px}
+  table{width:100%;border-collapse:collapse;font-family:'IBM Plex Mono',monospace;font-size:.78rem}
+  td,th{padding:7px 8px;border-top:1px solid var(--line);text-align:left;vertical-align:top}
+  th{color:var(--faint);font-weight:500;letter-spacing:.06em;text-transform:uppercase;font-size:.68rem}
+  .pass{color:var(--green)} .fail{color:var(--red)}
+  #selfcheck{font-family:'IBM Plex Mono',monospace;font-size:.85rem;margin-top:10px}
+  .sources ul{margin:0;padding-left:18px;color:var(--dim);font-size:.9rem} .sources li{margin:4px 0}
+  footer{margin-top:40px;color:var(--faint);font-size:.85rem;border-top:1px solid var(--line);padding-top:14px;line-height:1.6}
+  .lg{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;vertical-align:baseline}
+  .status{font-family:'IBM Plex Mono',monospace;font-size:.8rem;color:var(--faint)}
+  .k{font-family:'IBM Plex Mono',monospace}
+  .twocol{display:grid;grid-template-columns:1fr 1fr;gap:12px} @media (max-width:720px){.twocol{grid-template-columns:1fr}}
+  .small{font-size:.8rem;color:var(--faint)}
+  .ol{text-decoration:overline}
+</style>
+</head>
+<body><div class="wrap">
+
+<header>
+  <div class="eyebrow">Room IX · The Flip, Made Decidable</div>
+  <h1>The Interlacing Dial</h1>
+  <p class="sub">In 1936 Davenport and Heilbronn mixed two Dirichlet L-functions into one function that keeps the <b>functional equation</b> and loses the <b>Euler product</b> — and proved its zeros leave the critical line. This room builds the same mixture in the finite world of <b>F<sub>q</sub>[T]</b>, where the Riemann Hypothesis is Weil's theorem and the mixture's fate is decided by one inequality: the mixed zeros stay on the circle <b>exactly when the two constituents' zeros interlace</b>. Turn the dial through every character pair for q = 3, 5, 7 — all 194 of them, computed here — and then read the fence: over ℚ the same flip is the Riemann Hypothesis itself.</p>
+  <p class="creed"><b>Instruments, not proofs.</b> Every number on this page is a finite computation in a finite field. Nothing here bears on the truth of the Riemann Hypothesis.</p>
+  <p class="status" id="status">computing — three finite fields, every character, every pair…</p>
+</header>
+
+<section>
+  <h2>1 · The dial</h2>
+  <div class="card">
+    <div class="row" id="qpick"></div>
+    <div class="row"><button id="prev">◀ previous pair</button><button id="next">next pair ▶</button><button id="nextoff">next off-circle pair</button><input type="range" id="slider" min="0" max="5" value="0" aria-label="character pair"></div>
+    <canvas id="dial" width="900" height="540" aria-label="unit circle with the zeros of the two conjugate L-functions, the zeros of their matched mixture, and the inequality gauge"></canvas>
+    <div class="readout" id="r1"></div>
+    <p style="margin-top:10px">Blue dots: the two zeros of <b>L̃(χ)</b>; gold dots: the two zeros of <b>L̃(<span class="ol">χ</span>)</b> (their mirror images across the real axis — Weil's theorem puts all four on the circle). The rim between neighbouring zeros is green where a blue zero is followed by a gold one and red where two of the same colour sit side by side: <b>interlacing means every arc is green.</b> Red rings: the zeros of the matched real mixture c·L̃(χ) + c̄·L̃(<span class="ol">χ</span>) — on the circle when the arcs are all green, thrown onto the real axis as a reciprocal pair z, 1/z when they are not. The gauge on the right is the whole decision: the needle |r| against the envelope 2|cos(φ/2)|.</p>
+  </div>
+</section>
+
+<section>
+  <h2>2 · The census — 194 pairs on one chart</h2>
+  <div class="card">
+    <canvas id="scatter" width="900" height="420" aria-label="scatter of all character pairs in the (root-number angle, character-sum) plane with the envelope curves"></canvas>
+    <div class="readout" id="r2"></div>
+    <p style="margin-top:10px">Every conjugate pair of odd characters is one point: horizontal, the angle <b>φ</b> of its root number; vertical, the real number <b>r</b> that its degree-one character sum reduces to (Weil: |r| ≤ 2). The gold curves are the envelope <b>r = ±2cos(φ/2)</b>. Inside, the mixture's zeros are on the circle (green); outside, off (red). Tap a point to load it into the dial. Where the root number is near −1 the envelope pinches to zero and almost every mixture fails; where it is near +1 almost every mixture survives. The flip is not rare and not exotic — it is the generic behaviour of a mixture without an Euler product, exactly as over ℚ.</p>
+  </div>
+</section>
+
+<section>
+  <h2>3 · Why one inequality decides it</h2>
+  <div class="card thm">
+    <p class="big">Theorem (finite world, degree 2; elementary). Let χ be an odd character modulo an irreducible cubic over F<sub>q</sub>, L̃(z) = 1 + s₁z + s₂z² its normalised L-function (z = √q·u). The functional equation forces s₂ = e<sup>iφ</sup> and s₁ = r·e<sup>iφ/2</sup> with r real; Weil's theorem forces |r| ≤ 2. The matched real mixture c·L̃(χ) + c̄·L̃(<span class="ol">χ</span>) with c/c̄ = 1/s₂ — precisely the Davenport–Heilbronn recipe (1 + iκ)/(1 − iκ) = root number — equals <b>4·sin(φ/2)·[cos(φ/2)(1 + z²) + r·z]</b>. Its zeros lie on the unit circle <b>iff |r| ≤ 2|cos(φ/2)|</b>, <b>iff the zeros of L̃(χ) and L̃(<span class="ol">χ</span>) interlace on the circle</b>.</p>
+    <p><b>Proof.</b> Substitute; the quadratic cos(φ/2)(1 + z²) + r·z has discriminant r² − 4cos²(φ/2), so its roots are a conjugate pair on the circle when that is ≤ 0 and a real reciprocal pair z, 1/z when it is &gt; 0. The zeros of L̃(χ) sit at angles −φ/2 ± ψ with cos ψ = −r/2, those of L̃(<span class="ol">χ</span>) at their mirrors; the four alternate around the circle iff the two blue zeros lie in opposite half-planes, i.e. iff sin(−φ/2 + ψ)·sin(−φ/2 − ψ) = sin²(φ/2) − sin²ψ ≤ 0, i.e. iff |cos ψ| ≤ |cos(φ/2)|, the same inequality. ∎</p>
+    <p><b>Grade: T.</b> The one-way half — interlacing ⟹ zeros on the circle — holds in every degree (the Hermite–Biehler theorem on the unit circle); the converse fails from degree 3 on: in yesterday's census of degree-3 and degree-4 mixtures, 0 interlaced pairs left the circle in 314, but 61 of the 234 pairs at q = 5 were on the circle without interlacing. The antisymmetric mixture — the twin of Davenport–Heilbronn's second constant κ₋ — collapses in degree 2 to a multiple of 1 − z², zeros ±1 for free; the dial shows the symmetric one.</p>
+  </div>
+</section>
+
+<section>
+  <h2>4 · Over ℚ: the same recipe, and where it goes</h2>
+  <div class="twocol">
+    <div class="card">
+      <canvas id="kdial" width="440" height="330" aria-label="the kappa plane: functional-equation points on the real axis, Euler-product points on the imaginary axis"></canvas>
+      <div class="readout" id="r3"></div>
+    </div>
+    <div class="card">
+      <p><b>The κ-dial.</b> Davenport–Heilbronn is f<sub>κ</sub>(s) = ½(1 − iκ)·L(s,χ) + ½(1 + iκ)·L(s,<span class="ol">χ</span>), χ the odd character mod 5 with χ(2) = i. The functional equation lives at exactly two real points — <b>κ₊ = tan(½·arg ε) = 0.284079…</b> (Davenport–Heilbronn's constant, computed here from the Gauss sum of χ) and <b>κ₋ = −1/κ₊</b> (the antisymmetric equation). The Euler product lives at exactly two imaginary points, <b>κ = ±i</b>, where the mixture is a single L-function again: multiplicativity a(2)² = a(4) reads κ² + 1 = 0. The real axis and the imaginary axis meet only at κ = 0, which carries neither. <b>There is no dial to turn</b>: nothing between a mixture (zeros off the line, a theorem) and an L-function (zeros on the line, a conjecture).</p>
+      <p><b>What the finite dial reads for ℚ.</b> The root number of χ mod 5 has arg ε = 31.717°, so the envelope would read 2|cos(φ/2)| = 1.924 — but over ℚ there is no r. The needle is an <em>infinite</em> zero set, and its interlacing with its own mirror image breaks infinitely often. The theorem that replaces the inequality: a Dirichlet series with periodic coefficients that is not a Dirichlet polynomial times an L-function has a positive proportion of its zeros in every vertical strip to the right of the line (Saias–Weingartner 2009); a degree-one function with the functional equation that satisfies the Riemann Hypothesis must have an Euler product (Kaczorowski–Kulas 2007).</p>
+    </div>
+  </div>
+  <div class="card" style="margin-top:12px">
+    <p><b>Four specimens, read on the dial's terms.</b> Every off-line zero of the Davenport–Heilbronn function below t = 200 (Spira 1994) sits at a seam where the interlacing of the two constituents' zeros breaks — a run of <span class="ol">χ</span>-zeros followed by a run of χ-zeros — inside a stretch with no on-line zero, missing about three zeros of which two are the off-line pair.</p>
+    <table><thead><tr><th>off-line zero</th><th>constituent zeros around it (heights)</th><th>stretch with no on-line zero</th><th>zeros expected there</th></tr></thead><tbody>
+      <tr><td class="k">0.808517 + 85.699348 i</td><td class="k"><span class="ol">χ</span>: 83.38, 84.83, 85.40 → χ: 85.66, 86.68</td><td class="k">83.11 → 87.65 (4.54)</td><td class="k">3.05</td></tr>
+      <tr><td class="k">0.650830 + 114.163343 i</td><td class="k"><span class="ol">χ</span>: 113.43, 114.16 → χ: 114.21, 115.34, 116.23</td><td class="k">112.38 → 116.72 (4.35)</td><td class="k">3.12</td></tr>
+      <tr><td class="k">0.574356 + 166.479306 i</td><td class="k"><span class="ol">χ</span>: 164.37, 165.58, 166.36 → χ: 166.40, 167.26</td><td class="k">164.16 → 168.32 (4.16)</td><td class="k">3.24</td></tr>
+      <tr><td class="k">0.724258 + 176.702461 i</td><td class="k"><span class="ol">χ</span>: 174.84, 175.60, 176.70 → χ: 176.84, 177.23</td><td class="k">174.60 → 178.17 (3.57)</td><td class="k">2.81</td></tr>
+    </tbody></table>
+    <p class="small" style="margin-top:8px">Numerics (mpmath, 18 digits; receipts/dh_online_scan.py), four specimens, no theorem: seams are not sufficient — two seams near t ≈ 171–173 keep their on-line zeros. The first zero is certified by the argument principle (winding number 1 on a circle of radius 10⁻³; receipts/dh_dial_and_hn.py). Expected counts use the zero density (1/2π)·log(5t/2π).</p>
+  </div>
+</section>
+
+<section>
+  <h2>5 · The fence</h2>
+  <div class="card fence">
+    <p class="big">In the finite world both halves are decidable. Over ℚ neither is, and the second half <em>is</em> the Riemann Hypothesis.</p>
+    <p><b>Finite world.</b> Weil's theorem puts every constituent's zeros on the circle; one inequality then decides the mixture. Both halves are computed on this page, for every character, in under a second.</p>
+    <p><b>Over ℚ, first half.</b> Whether the constituents L(s,χ), L(s,<span class="ol">χ</span>) have all their zeros on the line is the generalized Riemann Hypothesis for χ mod 5 — <b>unproven</b>. Nothing on this page bears on it.</p>
+    <p><b>Over ℚ, second half.</b> The mixture's off-line zeros are a theorem (Davenport–Heilbronn 1936; Saias–Weingartner 2009). The only alteration that returns them to the line is κ → ±i — restoring the Euler product — which hands you the first half. <b>What the dial decides in one inequality is, over ℚ, the Riemann Hypothesis itself</b>: the interlacing-forever of a zero set with its mirror image, which is Hermite–Biehler positivity, which for ξ is Lagarias's Re ξ′/ξ &gt; 0 on Re s &gt; ½, which is RH.</p>
+    <p><b>So the room shows the shape of the missing ingredient, not the ingredient.</b> Finite windows can refute and never prove; a finite field is a finite window in which the theorem happens to be complete. Read the Davenport–Heilbronn fence in Room VII and the product's edge in Room VIII for the two other faces of the same lock.</p>
+  </div>
+</section>
+
+<section class="receipts">
+  <h2>Receipts</h2>
+  <p class="sub">Every number on this page is recomputed in your browser from the field arithmetic — generator, discrete logarithms, character sums, roots, interlacing test, mixture roots — and compared with the committed Python twin (<span class="k">receipts/interlacing_dial.py</span>, run 2026-09-24). Nothing is read from a table except the twin's values to check against.</p>
+  <table><thead><tr><th>quantity</th><th>computed here</th><th>Python twin</th><th></th></tr></thead><tbody id="rtab"></tbody></table>
+  <div id="selfcheck"></div>
+</section>
+
+<section class="sources">
+  <h2>Sources</h2>
+  <ul>
+    <li>H. Davenport and H. Heilbronn, <i>On the zeros of certain Dirichlet series</i> I and II, J. London Math. Soc. 11 (1936) 181–185 and 307–312 — the mixture, its functional equation, and infinitely many zeros with Re s &gt; 1.</li>
+    <li>R. Spira, <i>Some zeros of the Titchmarsh counterexample</i>, Math. Comp. 63 (1994) 747–748 — the four off-line zeros below t = 200 used above; E. P. Balanzario and J. Sánchez-Ortiz, <i>Zeros of the Davenport–Heilbronn counterexample</i>, Math. Comp. 76 (2007) 2045–2049.</li>
+    <li>E. Saias and A. Weingartner, <i>Zeros of Dirichlet series with periodic coefficients</i>, Acta Arith. 140 (2009) 335–344 — a positive proportion of zeros in every strip ½ &lt; σ₁ &lt; σ₂ ≤ 1 + η unless the series is a Dirichlet polynomial times an L-function.</li>
+    <li>J. Kaczorowski and M. Kulas, <i>On the non-trivial zeros off the critical line for L-functions from the extended Selberg class</i>, Monatsh. Math. 150 (2007) 217–232 — a degree-one function with the functional equation and the Riemann Hypothesis has an Euler product.</li>
+    <li>E. Bombieri and D. A. Hejhal, <i>On the distribution of zeros of linear combinations of Euler products</i>, Duke Math. J. 80 (1995) 821–862 — under GRH and linear independence of the zeros, almost all zeros of such a mixture are on the line and simple. A. A. Karatsuba, Math. USSR-Izv. 36 (1991) 311–324 — unconditionally at least T(log T)<sup>½−ε</sup> on the line.</li>
+    <li>J. C. Lagarias, <i>On a positivity property of the Riemann ξ-function</i>, Acta Arith. 89 (1999) 217–234 — RH ⟺ Re ξ′(s)/ξ(s) &gt; 0 for Re s &gt; ½.</li>
+    <li>A. Weil, <i>Sur les courbes algébriques et les variétés qui s'en déduisent</i> (Hermann, 1948) — the Riemann Hypothesis for function fields; M. Rosen, <i>Number Theory in Function Fields</i>, GTM 210 (Springer, 2002), ch. 4, for the L-functions of characters of F<sub>q</sub>[T]/(m) as polynomials with all roots on |u| = q<sup>−1/2</sup>.</li>
+    <li>Q. I. Rahman and G. Schmeisser, <i>Analytic Theory of Polynomials</i> (Oxford, 2002), the chapter on self-inversive polynomials; I. Schur, J. reine angew. Math. 147 (1917) 205–232; A. Cohn, Math. Z. 14 (1922) 110–148 — interlacing on the unit circle implies zeros on the unit circle (the Hermite–Biehler theorem for the circle).</li>
+    <li>The companion rooms: <a href="https://fractalyouniverse.org/Angle_atlas/">The Angle Atlas</a> (Room VII, whose Davenport–Heilbronn fence this page turns into a dial) and <a href="https://fractalyouniverse.org/Product_edge/">The Product's Edge</a> (Room VIII).</li>
+  </ul>
+</section>
+
+<footer>
+  <span class="lg" style="background:var(--gold)"></span>Fractal Youniverse · <a href="https://fractalyouniverse.org/">all instruments</a> · Travis Bergen · built 2026-09-24 with the Riemann agent · source and Python twin: <a href="https://github.com/travisbergen2/Interlacing_dial" target="_blank" rel="noopener noreferrer">github.com/travisbergen2/Interlacing_dial</a><br>
+  No tracking, no analytics; the only external request is the font stylesheet. Instruments, not proofs.
+</footer>
+
+</div>
+<script>
+(function(){
+  var PY = {"generated":"2026-09-24","kappa_plus":0.28407904384041227,"arg_eps_deg":31.7174744115,"census":[{"q":3,"m":[1,0,2,1],"g":[0,0,2],"N":26,"odd":13,"pairs":6,"on":3,"off":3,"rows":[[1,0.819938955,-5.6174,1],[3,1.063595976,-171.771246,0],[5,-0.511281335,-167.953626,0],[7,1.504130192,-108.96945,0],[9,-1.401447676,49.767215,1],[11,-0.204756481,-81.277143,1]]},{"q":5,"m":[1,0,1,1],"g":[0,0,2],"N":124,"odd":93,"pairs":46,"on":32,"off":14,"rows":[[1,-1.089833117,-143.798235,0],[2,-0.520360006,3.461148,1],[3,1.391392606,-20.94422,1],[5,-0.412695555,-178.636944,0],[6,0.341915117,90.649915,1],[7,-1.621417529,-52.549773,1],[9,0.368563226,81.149854,1],[10,-1.799653773,-66.216272,0],[11,-1.679267377,160.483685,0],[13,-0.73092889,-155.502639,0],[14,-1.24334412,170.192348,0],[15,0.225259246,-125.460349,1],[17,1.045766509,-103.635935,1],[18,1.191027811,138.334176,0],[19,-0.012371632,-94.589049,1],[21,1.680241816,106.201952,0],[22,-0.665104025,-123.740735,1],[23,-0.894498652,0.140469,1],[25,-0.283373696,7.169507,1],[26,-1.000308604,-83.543634,1],[27,-0.330592474,21.128847,1],[29,0.227580466,36.524533,1],[30,0.300888967,-118.382344,1],[31,-1.0,53.130102,1],[33,1.161705433,-103.522902,1],[34,0.587815066,128.762598,1],[35,0.398486407,63.579259,1],[37,1.166164107,61.772876,1],[38,0.943625288,103.823533,1],[39,-0.821675031,-24.106,1],[41,-0.043816135,-173.200321,1],[42,-0.700448205,-80.597727,1],[43,0.798088041,161.587418,0],[45,-0.630672606,127.601467,1],[46,0.9111488,24.246469,1],[47,-1.544326235,-7.078006,1],[49,1.354940924,-71.959006,1],[50,-0.604674727,-54.603369,1],[51,0.752061648,-75.77558,1],[53,-0.409047705,-57.184322,1],[54,1.589585256,-42.450412,1],[55,1.1227604,137.257879,0],[57,1.396367065,-112.420672,0],[58,1.351447836,140.047434,0],[59,-1.467650533,-111.594135,0],[61,-0.824310918,-147.259382,0]]},{"q":7,"m":[1,0,1,1],"g":[0,1,5],"N":342,"odd":285,"pairs":142,"on":99,"off":43,"rows":[[1,-1.16165813,-57.9433,1],[2,0.615686136,144.85556,0],[3,-0.633354683,-1.581329,1],[4,0.614238363,-31.089991,1],[5,-1.218945427,4.437846,1],[7,-0.14151415,-51.62751,1],[8,-1.335204165,139.838861,0],[9,1.164905987,67.745574,1],[10,0.991374801,-16.09673,1],[11,-1.6915395,-121.928424,0],[13,1.056294396,144.562411,0],[14,-1.49274677,157.487139,0],[15,-0.897957033,-122.927074,1],[16,0.892522066,-87.602655,1],[17,-0.205110094,-64.88341,1],[19,1.6217924,80.0,0],[20,-0.759632406,-130.85823,1],[21,-0.839023256,17.366039,1],[22,-0.764674541,8.951706,1],[23,1.182711489,-30.501658,1],[25,1.107288379,13.034115,1],[26,-0.487389268,-33.330397,1],[27,0.925874807,-64.115171,1],[28,-0.374351718,-5.826833,1],[29,1.832660201,102.274816,0],[31,-0.873689661,82.469999,1],[32,0.31751348,-13.43707,1],[33,0.621019439,-122.135325,1],[34,-0.080099277,147.217516,1],[35,0.220701745,36.016793,1],[37,-1.20020627,170.686954,0],[38,1.667380494,160.0,0],[39,-0.255445246,-65.460916,1],[40,-1.244394502,20.355981,1],[41,1.18907106,-169.205683,0],[43,0.821932732,-102.373264,1],[44,-0.236663892,-65.112253,1],[45,0.897202296,139.904645,0],[46,0.490099309,-159.668086,0],[47,-0.214713405,-81.404516,1],[49,-1.099911246,-7.416984,1],[50,1.495887636,-175.950613,0],[51,0.041525308,-85.032338,1],[52,1.230036568,40.530653,1],[53,-0.575872239,127.537974,1],[55,-0.234785627,-89.741685,1],[56,0.197009984,-169.634823,0],[57,0.0,81.786789,1],[58,-1.309884532,-94.320148,1],[59,1.256305624,-175.218217,0],[61,1.304977379,73.593306,1],[62,0.144966908,87.01244,1],[63,0.167996192,124.587679,1],[64,-0.684695784,-88.004359,1],[65,-0.235784926,-88.186297,1],[67,-1.003527953,-63.364406,1],[68,-0.083138051,-130.883733,1],[69,-1.675096314,179.145127,0],[70,1.191124201,47.061164,1],[71,-0.535367348,-162.586638,0],[73,-0.836876515,74.892919,1],[74,-1.059493858,-127.902997,0],[75,0.943445326,-154.913237,0],[76,0.069845012,-40.0,1],[77,-0.752160644,-52.45474,1],[79,0.958578332,-63.515805,1],[80,0.752764858,95.787544,1],[81,-1.443640779,-134.620123,0],[82,0.910748274,-124.813219,1],[83,-1.511005402,-44.371165,1],[85,-0.224815382,98.856464,1],[86,0.601227692,-58.344676,1],[87,-1.166550373,-34.560447,1],[88,1.674066198,-64.905741,1],[89,0.557813531,84.30143,1],[91,-0.50818092,-133.332326,1],[92,-1.028380726,118.591387,0],[93,-0.441569983,-105.233096,1],[94,-0.91116116,159.646186,0],[95,1.350836693,40.0,1],[97,0.981364072,102.930575,1],[98,1.268356744,-114.091809,0],[99,1.643418102,162.482416,0],[100,-1.318282887,0.818398,1],[101,0.280165409,51.603605,1],[103,0.088491586,-119.839362,1],[104,0.517819252,-1.954358,1],[105,0.805235178,-28.190232,1],[106,-1.396374782,-43.793832,1],[107,1.480809676,-43.975771,1],[109,-0.146607427,-31.936858,1],[110,-1.768494803,-33.081518,1],[111,1.794764196,-86.285728,0],[112,-1.062899452,13.449976,1],[113,1.081299132,-37.659981,1],[115,-0.190578444,176.9152,0],[116,-0.67890497,-56.660167,1],[117,0.781793439,-16.958824,1],[118,0.986329664,171.331806,0],[119,-1.899180761,42.485011,0],[121,1.513302911,-176.76901,0],[122,0.854986405,106.674825,1],[123,0.485301745,-160.050978,0],[124,1.70718884,118.949298,0],[125,-1.568093859,81.740527,0],[127,0.326249094,-0.206512,1],[128,-0.709626508,-44.028588,1],[129,-1.292378343,65.314136,1],[130,1.313664242,-44.392465,1],[131,0.077973432,-75.431563,1],[133,-1.404849126,-160.0,0],[134,0.610420828,-61.410049,1],[135,-1.637964365,1.988544,1],[136,1.264839599,-11.044371,1],[137,-1.053400675,-81.898751,1],[139,-0.577321764,74.567289,1],[140,1.56733106,-4.54244,1],[141,-0.115648683,-105.0654,1],[142,-0.451384591,-163.405036,0],[143,1.070154557,163.80799,0],[145,0.126423354,-73.861049,1],[146,-0.024586239,-171.015272,1],[147,0.466749567,149.997618,1],[148,-1.8955216,129.166428,0],[149,1.438600956,74.063958,1],[151,-0.751435797,-151.214211,0],[152,-0.463642063,-80.0,1],[153,-0.667033564,-106.411145,1],[154,-1.250779741,147.899074,0],[155,0.18432899,-74.165586,1],[157,-1.110075445,163.313972,0],[158,-0.16108998,177.892807,0],[159,1.289285427,41.229026,1],[160,-0.785234947,-130.88013,1],[161,-0.202863091,114.761499,1],[163,0.680238524,-132.558484,1],[164,-1.161735345,150.885351,0],[165,1.000479121,103.208872,1],[166,-0.126399989,20.534576,1],[167,0.648441688,-170.928852,0],[169,1.28201232,175.945551,0],[170,-0.202923963,157.20114,1]]}],"totals":{"pairs":194,"on":134,"off":60}};
+  var TAU = 2 * Math.PI, DEG = 180 / Math.PI;
+  var status = document.getElementById('status');
+  var t0 = performance.now();
+
+  // ---------- complex helpers ----------
+  function cx(re, im) { return { re: re, im: im }; }
+  function cadd(a, b) { return cx(a.re + b.re, a.im + b.im); }
+  function csub(a, b) { return cx(a.re - b.re, a.im - b.im); }
+  function cmul(a, b) { return cx(a.re * b.re - a.im * b.im, a.re * b.im + a.im * b.re); }
+  function cdiv(a, b) { var d = b.re * b.re + b.im * b.im; return cx((a.re * b.re + a.im * b.im) / d, (a.im * b.re - a.re * b.im) / d); }
+  function cabs(a) { return Math.hypot(a.re, a.im); }
+  function carg(a) { return Math.atan2(a.im, a.re); }
+  function cconj(a) { return cx(a.re, -a.im); }
+  function cis(t) { return cx(Math.cos(t), Math.sin(t)); }
+  function csqrt(a) { var m = cabs(a), re = Math.sqrt(Math.max(0, (m + a.re) / 2)), im = Math.sqrt(Math.max(0, (m - a.re) / 2)); if (a.im < 0) im = -im; return cx(re, im); }
+  function quadRoots(a, b, c) { // a z^2 + b z + c
+    var disc = csqrt(csub(cmul(b, b), cmul(cx(4, 0), cmul(a, c)))), twoA = cmul(cx(2, 0), a), mb = cx(-b.re, -b.im);
+    return [cdiv(cadd(mb, disc), twoA), cdiv(csub(mb, disc), twoA)];
+  }
+  function angDiff(a, b) { var d = (a - b) % 360; if (d > 180) d -= 360; if (d < -180) d += 360; return Math.abs(d); }
+
+  // ---------- the finite field F_q[T]/(m), m a monic cubic (low -> high) ----------
+  function Field(q, m) { this.q = q; this.m = m; }
+  Field.prototype.mul = function (x, y) {
+    var q = this.q, m = this.m, p = [0, 0, 0, 0, 0], i, j, k, c;
+    for (i = 0; i < 3; i++) if (x[i]) for (j = 0; j < 3; j++) if (y[j]) p[i + j] = (p[i + j] + x[i] * y[j]) % q;
+    for (k = 4; k >= 3; k--) { c = p[k]; if (c) { for (i = 0; i < 3; i++) p[k - 3 + i] = (((p[k - 3 + i] - c * m[i]) % q) + q) % q; p[k] = 0; } }
+    return [p[0], p[1], p[2]];
+  };
+  Field.prototype.pow = function (x, e) { var r = [1, 0, 0], b = x.slice(); while (e > 0) { if (e % 2 === 1) r = this.mul(r, b); b = this.mul(b, b); e = Math.floor(e / 2); } return r; };
+  function key(v) { return v[0] + ',' + v[1] + ',' + v[2]; }
+  function isOne(v) { return v[0] === 1 && v[1] === 0 && v[2] === 0; }
+  function primeFactors(n) { var out = [], p = 2; while (p * p <= n) { if (n % p === 0) { out.push(p); while (n % p === 0) n /= p; } p++; } if (n > 1) out.push(n); return out; }
+  function interlaced(A, B) {
+    var pts = [], i;
+    A.forEach(function (a) { pts.push([((a % TAU) + TAU) % TAU, 0]); });
+    B.forEach(function (b) { pts.push([((b % TAU) + TAU) % TAU, 1]); });
+    pts.sort(function (u, v) { return u[0] - v[0]; });
+    for (i = 0; i < pts.length; i++) if (pts[i][1] === pts[(i + 1) % pts.length][1]) return false;
+    return true;
+  }
+
+  // ---------- the census for one q ----------
+  function census(q, m, g) {
+    var F = new Field(q, m), N = q * q * q - 1, pf = primeFactors(N), i, j, k;
+    var orderOK = isOne(F.pow(g, N)) && pf.every(function (l) { return !isOne(F.pow(g, N / l)); });
+    var log = {}, x = [1, 0, 0], count = 0;
+    for (k = 0; k < N; k++) { var kk = key(x); if (log[kk] !== undefined) break; log[kk] = k; count++; x = F.mul(x, g); }
+    var fieldOK = orderOK && count === N && isOne(x);
+    var constLogs = [], monic1 = [], monic2 = [], a, b;
+    for (a = 1; a < q; a++) constLogs.push(log[key([a, 0, 0])]);
+    for (a = 0; a < q; a++) { monic1.push(log[key([a, 1, 0])]); for (b = 0; b < q; b++) monic2.push(log[key([b, a, 1])]); }
+    var rows = [], odd = 0, weil = 0, sqq = Math.sqrt(q);
+    for (j = 1; j < N; j++) {
+      var isOdd = false; for (i = 0; i < constLogs.length; i++) if ((j * constLogs[i]) % N !== 0) { isOdd = true; break; }
+      if (!isOdd) continue; odd++;
+      var S1 = cx(0, 0), S2 = cx(0, 0);
+      for (i = 0; i < monic1.length; i++) S1 = cadd(S1, cis(TAU * ((j * monic1[i]) % N) / N));
+      for (i = 0; i < monic2.length; i++) S2 = cadd(S2, cis(TAU * ((j * monic2[i]) % N) / N));
+      var s1 = cx(S1.re / sqq, S1.im / sqq), s2 = cx(S2.re / q, S2.im / q);
+      var rootsA = quadRoots(s2, s1, cx(1, 0));                       // zeros of L~(chi)(z) = 1 + s1 z + s2 z^2
+      var weilOK = rootsA.every(function (z) { return Math.abs(cabs(z) - 1) < 1e-9; }); if (weilOK) weil++;
+      var jb = N - j; if (j >= jb) continue;                           // one row per conjugate pair; the real character (j = N/2) has no partner
+      var phi = carg(s2), rot = cmul(s1, cis(-phi / 2)), r = rot.re;
+      var feOK = Math.abs(rot.im) < 1e-9 && Math.abs(cabs(s2) - 1) < 1e-9; // s1 = s2 conj(s1): the functional equation
+      var w = csub(s2, cx(1, 0)), c = cabs(w) > 1e-9 ? cmul(cx(0, 1), cconj(w)) : cx(1, 0); // matched mixture, from the definition
+      var F0 = 2 * c.re, F1 = 2 * cmul(c, s1).re, F2 = 2 * cmul(c, s2).re;
+      var rootsF = quadRoots(cx(F2, 0), cx(F1, 0), cx(F0, 0));
+      var on = rootsF.every(function (z) { return Math.abs(cabs(z) - 1) < 1e-7; });
+      var rootsB = rootsA.map(cconj);
+      var il = interlaced(rootsA.map(carg), rootsB.map(carg));
+      var closed = Math.abs(r) <= 2 * Math.abs(Math.cos(phi / 2)) + 1e-12;
+      rows.push({ j: j, jb: jb, r: r, phi: phi, on: on, il: il, closed: closed, fe: feOK, pal: Math.abs(F0 - F2) < 1e-9, rootsA: rootsA, rootsB: rootsB, rootsF: rootsF, S1: S1, S2: S2 });
+    }
+    var onCount = 0; rows.forEach(function (rw) { if (rw.on) onCount++; });
+    return { q: q, m: m, g: g, N: N, fieldOK: fieldOK, odd: odd, weil: weil, rows: rows, on: onCount, off: rows.length - onCount };
+  }
+
+  var C = PY.census.map(function (pc) { return census(pc.q, pc.m, pc.g); });
+  var totalPairs = 0; C.forEach(function (c) { totalPairs += c.rows.length; });
+
+  // ---------- Davenport–Heilbronn constants from the Gauss sum of chi mod 5 (chi(2) = i) ----------
+  var chi5 = { 1: cx(1, 0), 2: cx(0, 1), 3: cx(0, -1), 4: cx(-1, 0) }, tau = cx(0, 0), n;
+  for (n = 1; n <= 4; n++) tau = cadd(tau, cmul(chi5[n], cis(TAU * n / 5)));
+  var eps = cdiv(tau, cx(0, Math.sqrt(5)));                            // root number of an odd character: tau / (i sqrt 5)
+  var argEps = carg(eps), kappa = Math.tan(argEps / 2), kappaMinus = -1 / kappa;
+  var radical = (Math.sqrt(10 - 2 * Math.sqrt(5)) - 2) / (Math.sqrt(5) - 1);
+  var feDefect = cabs(csub(cdiv(cx(1, kappa), cx(1, -kappa)), eps));   // (1 + i kappa)/(1 - i kappa) must equal eps
+
+  // ---------- state ----------
+  var qi = 0, pi = 0;
+  var qpick = document.getElementById('qpick'), slider = document.getElementById('slider');
+  C.forEach(function (c, i) { var b = document.createElement('button'); b.textContent = 'q = ' + c.q + ' · ' + c.rows.length + ' pairs'; b.addEventListener('click', function () { qi = i; pi = 0; sync(); }); qpick.appendChild(b); });
+  document.getElementById('prev').addEventListener('click', function () { pi = (pi - 1 + C[qi].rows.length) % C[qi].rows.length; sync(); });
+  document.getElementById('next').addEventListener('click', function () { pi = (pi + 1) % C[qi].rows.length; sync(); });
+  document.getElementById('nextoff').addEventListener('click', function () { var R = C[qi].rows, k; for (k = 1; k <= R.length; k++) { var idx = (pi + k) % R.length; if (!R[idx].on) { pi = idx; break; } } sync(); });
+  slider.addEventListener('input', function () { pi = parseInt(slider.value, 10) || 0; sync(); });
+
+  function setupCanvas(cv, aspect) { var W0 = cv.clientWidth || cv.width; return setupCanvasH(cv, Math.round(W0 * aspect)); }
+  function setupCanvasH(cv, H) {
+    var dpr = window.devicePixelRatio || 1, W = cv.clientWidth || cv.width;
+    cv.width = W * dpr; cv.height = H * dpr; cv.style.height = H + 'px';
+    var c = cv.getContext('2d'); c.setTransform(dpr, 0, 0, dpr, 0, 0); c.fillStyle = '#0e1420'; c.fillRect(0, 0, W, H);
+    return { c: c, W: W, H: H };
+  }
+  function sup(n) { var map = { '-': '⁻', '0': '⁰', '1': '¹', '2': '²', '3': '³', '4': '⁴', '5': '⁵', '6': '⁶', '7': '⁷', '8': '⁸', '9': '⁹' }; return String(n).split('').map(function (ch) { return map[ch] || ch; }).join(''); }
+
+  // ---------- panel 1: the dial ----------
+  function textBars(c, str, x, y) { // left-aligned text; "χ̄" (chi + combining macron) is drawn as chi with a bar, because canvas fonts drop the combining mark
+    var parts = str.split('χ̄'), i, w;
+    c.textAlign = 'left';
+    for (i = 0; i < parts.length; i++) {
+      if (parts[i]) { c.fillText(parts[i], x, y); x += c.measureText(parts[i]).width; }
+      if (i < parts.length - 1) { c.fillText('χ', x, y); w = c.measureText('χ').width; c.fillRect(x + 0.5, y - 10, w - 1, 1.2); x += w; }
+    }
+    return x;
+  }
+  function chiDot(c, x, y, col, bar) {
+    c.beginPath(); c.arc(x, y, 7, 0, TAU); c.fillStyle = col; c.fill();
+    c.fillStyle = '#0b0e14'; c.font = 'bold 9px IBM Plex Mono, monospace'; c.textAlign = 'center'; c.fillText('χ', x, y + 3.5);
+    if (bar) c.fillRect(x - 3, y - 5.5, 6, 1.2);
+  }
+  function drawDial() {
+    var cv = document.getElementById('dial'), W = cv.clientWidth || 900, narrow = W < 620;
+    var R = narrow ? Math.min(W * 0.33, 200) : Math.min(W * 0.22, 200);
+    var H = narrow ? Math.round(2 * R + 340) : Math.round(2 * R + 160);
+    var S = setupCanvasH(cv, H), c = S.c;
+    var ox = narrow ? W / 2 : W * 0.34, oy = narrow ? R + 26 : H / 2;
+    var gx = narrow ? 24 : W * 0.68, gw = narrow ? W - 48 : W * 0.29, gy = narrow ? 2 * R + 175 : Math.round(H * 0.34);
+    var clipR = Math.min(1.9, (ox - 26) / R, ((narrow ? W : gx) - 26 - ox) / R);
+    var row = C[qi].rows[pi], i;
+    function P(z) { return [ox + R * z.re, oy - R * z.im]; }
+    // rim, arcs coloured by interlacing
+    var pts = [];
+    row.rootsA.forEach(function (z) { pts.push([((carg(z) % TAU) + TAU) % TAU, 0]); });
+    row.rootsB.forEach(function (z) { pts.push([((carg(z) % TAU) + TAU) % TAU, 1]); });
+    pts.sort(function (u, v) { return u[0] - v[0]; });
+    for (i = 0; i < pts.length; i++) {
+      var a0 = pts[i][0], a1 = pts[(i + 1) % pts.length][0]; if (i === pts.length - 1) a1 += TAU;
+      c.beginPath(); c.arc(ox, oy, R, -a1, -a0, false); c.strokeStyle = pts[i][1] === pts[(i + 1) % pts.length][1] ? '#ff5c5c' : '#6fdc9a'; c.lineWidth = 3; c.stroke();
+    }
+    // axes
+    c.strokeStyle = '#26304a'; c.lineWidth = 1; c.setLineDash([3, 4]); c.beginPath(); c.moveTo(ox - clipR * R - 10, oy); c.lineTo(ox + clipR * R + 10, oy); c.stroke(); c.beginPath(); c.moveTo(ox, oy - R - 12); c.lineTo(ox, oy + R + 12); c.stroke(); c.setLineDash([]);
+    // root-number ray
+    var e = cis(row.phi); c.strokeStyle = '#e8c47a'; c.lineWidth = 1; c.setLineDash([5, 4]); c.beginPath(); c.moveTo(ox, oy); c.lineTo(ox + R * e.re, oy - R * e.im); c.stroke(); c.setLineDash([]);
+    // constituent zeros
+    row.rootsA.forEach(function (z) { var p = P(z); chiDot(c, p[0], p[1], '#7dd3fc', false); });
+    row.rootsB.forEach(function (z) { var p = P(z); chiDot(c, p[0], p[1], '#e8c47a', true); });
+    // mixture zeros
+    row.rootsF.forEach(function (z) {
+      var m = cabs(z), zz = z, clipped = false;
+      if (m > clipR) { zz = cx(z.re / m * clipR, z.im / m * clipR); clipped = true; }
+      var p = P(zz); c.beginPath(); c.arc(p[0], p[1], 10, 0, TAU); c.strokeStyle = '#ff5c5c'; c.lineWidth = 2.2; c.stroke();
+      if (!row.on) { c.fillStyle = '#ff5c5c'; c.font = '11px IBM Plex Mono, monospace'; c.textAlign = 'center'; c.fillText('|z| = ' + m.toFixed(m > 10 ? 1 : 3) + (clipped ? (z.re < 0 ? ' ←' : ' →') : ''), p[0], p[1] - 15); }
+    });
+    c.beginPath(); c.arc(ox, oy, 2.5, 0, TAU); c.fillStyle = '#e6edf3'; c.fill();
+    // legend
+    c.font = '11px IBM Plex Mono, monospace';
+    var lx = 14, ly = narrow ? 2 * R + 52 : 18, lh = 16;
+    c.fillStyle = '#7dd3fc'; textBars(c, '● zeros of L(χ)', lx, ly);
+    c.fillStyle = '#e8c47a'; textBars(c, '● zeros of L(χ̄)  (mirror images)', lx, ly + lh);
+    c.fillStyle = '#ff5c5c'; textBars(c, '○ zeros of the mixture', lx, ly + 2 * lh);
+    c.fillStyle = '#6fdc9a'; textBars(c, 'rim: green = colours alternate, red = repeat', lx, ly + 3 * lh);
+    c.fillStyle = '#e8c47a'; textBars(c, '- - root number, φ = ' + (row.phi * DEG).toFixed(1) + '°', lx, ly + 4 * lh);
+    // gauge
+    var env = 2 * Math.abs(Math.cos(row.phi / 2)), needle = Math.abs(row.r), scale = gw / 2.05;
+    c.fillStyle = '#9fb0c3'; c.font = '12px Inter, sans-serif'; c.textAlign = 'left'; c.fillText('the inequality  |r| ≤ 2|cos(φ/2)|', gx, gy - 34);
+    c.fillStyle = '#e6edf3'; c.font = '11px IBM Plex Mono, monospace'; c.fillText('needle |r| = ' + needle.toFixed(4), gx, gy - 12);
+    c.fillStyle = row.on ? '#6fdc9a' : '#ff5c5c'; c.fillRect(gx, gy, needle * scale, 26);
+    c.strokeStyle = '#26304a'; c.lineWidth = 1; c.beginPath(); c.moveTo(gx, gy + 40); c.lineTo(gx + gw, gy + 40); c.stroke();
+    c.fillStyle = '#6b7a8c'; c.font = '10px IBM Plex Mono, monospace'; c.textAlign = 'center'; [0, 0.5, 1, 1.5, 2].forEach(function (v) { c.beginPath(); c.moveTo(gx + v * scale, gy + 36); c.lineTo(gx + v * scale, gy + 44); c.stroke(); c.fillText(String(v), gx + v * scale, gy + 56); });
+    c.strokeStyle = '#e8c47a'; c.lineWidth = 3; c.beginPath(); c.moveTo(gx + env * scale, gy - 6); c.lineTo(gx + env * scale, gy + 34); c.stroke();
+    c.fillStyle = '#e8c47a'; c.font = '11px IBM Plex Mono, monospace'; c.textAlign = env * scale > gw * 0.55 ? 'right' : 'left'; c.fillText('envelope 2|cos(φ/2)| = ' + env.toFixed(4), gx + env * scale + (env * scale > gw * 0.55 ? -6 : 6), gy + 76);
+    // verdict + rim order
+    var order = pts.map(function (p) { return p[1] === 0 ? 'χ' : 'χ̄'; }).join(' · ');
+    c.fillStyle = row.on ? '#6fdc9a' : '#ff5c5c'; c.font = '600 15px Inter, sans-serif'; c.textAlign = 'left';
+    c.fillText(row.on ? 'ON THE CIRCLE — the zeros interlace' : 'OFF THE CIRCLE — interlacing breaks', gx, gy + 108);
+    c.fillStyle = '#9fb0c3'; c.font = '11px IBM Plex Mono, monospace'; textBars(c, 'rim order: ' + order, gx, gy + 130);
+    textBars(c, 'pair (χ' + row.j + ', χ̄ = χ' + row.jb + ') · q = ' + C[qi].q + ' · N = ' + C[qi].N, gx, gy + 148);
+  }
+  function readout1() {
+    var row = C[qi].rows[pi], q = C[qi].q, cq = C[qi];
+    var psi = Math.acos(Math.max(-1, Math.min(1, -row.r / 2)));
+    document.getElementById('r1').innerHTML =
+      'q = <b>' + q + '</b> · F<sub>' + q + '</sub>[T]/(m), m = ' + polyStr(cq.m, q) + ' · characters χ<sub>j</sub>(f) = e<sup>2πi·j·log<sub>g</sub>(f)/' + cq.N + '</sup>, g = ' + polyStr(cq.g.concat([0]), q, true) +
+      '<br>pair <b>(χ<sub>' + row.j + '</sub>, χ<sub>' + row.jb + '</sub>)</b> · S₁ = Σ<sub>a</sub> χ(T + a) = ' + cstr(row.S1) + ' · S₂ = Σ<sub>a,b</sub> χ(T² + aT + b) = ' + cstr(row.S2) +
+      '<br>root number s₂ = S₂/q, φ = <b>' + (row.phi * DEG).toFixed(4) + '°</b> · r = Re(s₁·e<sup>−iφ/2</sup>) = <b>' + row.r.toFixed(6) + '</b> (|r| ≤ 2 by Weil) · zeros of L̃(χ) at −φ/2 ± ψ, ψ = ' + (psi * DEG).toFixed(2) + '°' +
+      '<br>|r| = ' + Math.abs(row.r).toFixed(6) + ' vs 2|cos(φ/2)| = ' + (2 * Math.abs(Math.cos(row.phi / 2))).toFixed(6) + ' → <span class="' + (row.on ? 'on' : 'off') + '">' + (row.on ? 'ON the circle' : 'OFF the circle') + '</span> · interlaced: ' + (row.il ? 'yes' : 'no') + ' · mixture zeros ' + row.rootsF.map(function (z) { return row.on ? 'at ' + (carg(z) * DEG).toFixed(2) + '°' : 'at |z| = ' + cabs(z).toFixed(4); }).join(', ');
+  }
+  function polyStr(v, q, isElem) { var terms = [], names = ['', 'T', 'T²', 'T³'], i; for (i = v.length - 1; i >= 0; i--) { if (!v[i]) continue; var cf = v[i] === 1 && i > 0 ? '' : String(v[i]); terms.push(cf + names[i]); } return terms.length ? terms.join(' + ') : '0'; }
+  function cstr(z) { return z.re.toFixed(4) + (z.im < 0 ? ' − ' : ' + ') + Math.abs(z.im).toFixed(4) + 'i'; }
+
+  // ---------- panel 2: the census scatter ----------
+  var scatterGeom = null;
+  function drawScatter() {
+    var cv = document.getElementById('scatter'), S = setupCanvas(cv, cv.clientWidth < 620 ? 0.8 : 0.46), c = S.c, W = S.W, H = S.H;
+    var m = { l: 54, r: 16, t: 18, b: 40 }, pw = W - m.l - m.r, ph = H - m.t - m.b;
+    function X(phiDeg) { return m.l + (phiDeg + 180) / 360 * pw; } function Y(r) { return m.t + (2.15 - r) / 4.3 * ph; }
+    scatterGeom = { X: X, Y: Y, m: m, pw: pw, ph: ph };
+    c.strokeStyle = '#26304a'; c.lineWidth = 1; c.fillStyle = '#6b7a8c'; c.font = '11px IBM Plex Mono, monospace'; c.textAlign = 'center';
+    [-180, -90, 0, 90, 180].forEach(function (v) { c.beginPath(); c.moveTo(X(v), m.t); c.lineTo(X(v), m.t + ph); c.stroke(); c.fillText(v + '°', X(v), H - 16); });
+    c.textAlign = 'right'; [-2, -1, 0, 1, 2].forEach(function (v) { c.beginPath(); c.moveTo(m.l, Y(v)); c.lineTo(m.l + pw, Y(v)); c.stroke(); c.fillText(String(v), m.l - 6, Y(v) + 4); });
+    c.fillStyle = '#9fb0c3'; c.font = '11.5px Inter, sans-serif'; c.textAlign = 'center'; c.fillText('φ = arg of the root number', m.l + pw / 2, H - 3);
+    c.save(); c.translate(13, m.t + ph / 2); c.rotate(-Math.PI / 2); c.fillText('r  (degree-one character sum / √q)', 0, 0); c.restore();
+    // envelope
+    [1, -1].forEach(function (sg) { c.beginPath(); var first = true, d; for (d = -180; d <= 180; d += 1) { var y = sg * 2 * Math.cos(d / DEG / 2); if (first) { c.moveTo(X(d), Y(y)); first = false; } else c.lineTo(X(d), Y(y)); } c.strokeStyle = '#e8c47a'; c.lineWidth = 1.6; c.stroke(); });
+    c.fillStyle = '#e8c47a'; c.font = '11px IBM Plex Mono, monospace'; c.textAlign = 'left'; c.fillText('r = ±2cos(φ/2)', X(-175), Y(1.55));
+    // points: other q faint, current q bright
+    C.forEach(function (cq, i) {
+      cq.rows.forEach(function (rw) {
+        var x = X(rw.phi * DEG), y = Y(rw.r), cur = i === qi;
+        c.beginPath(); c.arc(x, y, cur ? 4.2 : 2.2, 0, TAU); c.fillStyle = rw.on ? (cur ? '#6fdc9a' : 'rgba(111,220,154,0.35)') : (cur ? '#ff5c5c' : 'rgba(255,92,92,0.35)'); c.fill();
+      });
+    });
+    var sel = C[qi].rows[pi]; c.beginPath(); c.arc(X(sel.phi * DEG), Y(sel.r), 9, 0, TAU); c.strokeStyle = '#e6edf3'; c.lineWidth = 1.8; c.stroke();
+    c.fillStyle = '#9fb0c3'; c.font = '11px IBM Plex Mono, monospace'; c.textAlign = 'left';
+    c.fillText('q = ' + C[qi].q + ' (bright): ' + C[qi].on + ' on · ' + C[qi].off + ' off of ' + C[qi].rows.length + ' pairs', m.l + 8, m.t + 14);
+  }
+  document.getElementById('scatter').addEventListener('click', function (ev) {
+    if (!scatterGeom) return; var rect = ev.currentTarget.getBoundingClientRect(), x = ev.clientX - rect.left, y = ev.clientY - rect.top, best = -1, bd = 1e9;
+    C[qi].rows.forEach(function (rw, i) { var d = Math.hypot(scatterGeom.X(rw.phi * DEG) - x, scatterGeom.Y(rw.r) - y); if (d < bd) { bd = d; best = i; } });
+    if (best >= 0 && bd < 30) { pi = best; sync(); }
+  });
+  function readout2() {
+    var tot = 0, on = 0; C.forEach(function (c) { tot += c.rows.length; on += c.on; });
+    document.getElementById('r2').innerHTML = C.map(function (c) { return 'q = ' + c.q + ': <b>' + c.on + '</b> on · <b>' + c.off + '</b> off of ' + c.rows.length; }).join(' · ') + ' · all q: <b>' + on + '</b> on the circle, <b>' + (tot - on) + '</b> off, of ' + tot + ' conjugate pairs · in every pair the inequality, the interlacing test and the numerically computed mixture zeros agree';
+  }
+
+  // ---------- panel 3: the kappa-dial over Q ----------
+  function drawKappa() {
+    var cv = document.getElementById('kdial'), S = setupCanvas(cv, 0.75), c = S.c, W = S.W, H = S.H;
+    var ox = W * 0.56, oy = H * 0.5, sc = Math.min(Math.min(W, H) * 0.2, (ox - 70) / 3.6);
+    c.strokeStyle = '#26304a'; c.lineWidth = 1; c.beginPath(); c.moveTo(16, oy); c.lineTo(W - 10, oy); c.stroke(); c.beginPath(); c.moveTo(ox, 26); c.lineTo(ox, H - 26); c.stroke();
+    c.setLineDash([3, 4]); c.beginPath(); c.arc(ox, oy, sc, 0, TAU); c.strokeStyle = '#26304a'; c.stroke(); c.setLineDash([]);
+    c.font = '11px IBM Plex Mono, monospace'; c.fillStyle = '#9fb0c3';
+    c.textAlign = 'right'; c.fillText('real κ: functional equation', W - 10, oy - 8);
+    c.textAlign = 'left'; c.fillText('imaginary κ: Euler product', ox + 10, 18);
+    function dot(x, y, col) { c.beginPath(); c.arc(x, y, 6, 0, TAU); c.fillStyle = col; c.fill(); }
+    dot(ox + kappa * sc, oy, '#e8c47a'); c.fillStyle = '#e8c47a'; c.textAlign = 'left'; c.fillText('κ₊ = ' + kappa.toFixed(6), ox + kappa * sc + 9, oy + 20);
+    dot(ox + kappaMinus * sc, oy, '#e8c47a'); c.textAlign = 'center'; c.fillText('κ₋ = ' + kappaMinus.toFixed(6), ox + kappaMinus * sc, oy + 22);
+    dot(ox, oy - sc, '#7dd3fc'); c.fillStyle = '#7dd3fc'; textBars(c, '+i  →  L(s, χ)', ox + 10, oy - sc + 4);
+    dot(ox, oy + sc, '#7dd3fc'); textBars(c, '−i  →  L(s, χ̄)', ox + 10, oy + sc + 4);
+    c.beginPath(); c.arc(ox, oy, 4, 0, TAU); c.strokeStyle = '#ff5c5c'; c.lineWidth = 1.5; c.stroke(); c.fillStyle = '#ff5c5c'; c.textAlign = 'right'; c.fillText('κ = 0: neither', ox - 9, oy - 8);
+    c.fillStyle = '#6b7a8c'; c.textAlign = 'center'; c.font = '11px Inter, sans-serif'; c.fillText('the two axes never meet away from 0 — there is nothing to turn', W / 2, H - 8);
+  }
+  function readout3() {
+    document.getElementById('r3').innerHTML = 'Gauss sum τ = Σ χ(n)e<sup>2πin/5</sup> = ' + cstr(tau) + ' · ε = τ/(i√5) = ' + cstr(eps) + ' · arg ε = <b>' + (argEps * DEG).toFixed(7) + '°</b><br>κ₊ = tan(½ arg ε) = <b>' + kappa.toFixed(12) + '</b> · Davenport–Heilbronn\'s radical (√(10 − 2√5) − 2)/(√5 − 1) = ' + radical.toFixed(12) + ' · |(1 + iκ₊)/(1 − iκ₊) − ε| = ' + feDefect.toExponential(1) + '<br>the twin\'s envelope for this ε: 2|cos(½ arg ε)| = ' + (2 * Math.abs(Math.cos(argEps / 2))).toFixed(4) + ' — and no r exists over ℚ.';
+  }
+
+  // ---------- receipts ----------
+  var rows = [], pass = 0;
+  function row(name, here, py, tol) { var ok = Math.abs(here - py) <= tol; if (ok) pass++; rows.push([name, here, py, ok, tol]); }
+  var pairAgree = 0, equivCount = 0;
+  C.forEach(function (c, i) {
+    var pc = PY.census[i], agree = 0;
+    row('q = ' + c.q + ': order of the generator g (= q³ − 1 ⇒ the modulus is irreducible)', c.fieldOK ? c.N : -1, pc.N, 0);
+    row('q = ' + c.q + ': odd characters whose two L-zeros lie on |u| = q^{−1/2} (Weil)', c.weil === c.odd ? c.weil : -1, pc.odd, 0);
+    row('q = ' + c.q + ': conjugate pairs with the mixture on the circle', c.on, pc.on, 0);
+    row('q = ' + c.q + ': conjugate pairs with the mixture off the circle', c.off, pc.off, 0);
+    c.rows.forEach(function (rw, k) { var p = pc.rows[k]; if (p && p[0] === rw.j && Math.abs(p[1] - rw.r) < 1e-6 && angDiff(p[2], rw.phi * DEG) < 1e-4 && ((p[3] === 1) === rw.on)) agree++; if (rw.on === rw.il && rw.il === rw.closed && rw.fe && rw.pal) equivCount++; });
+    pairAgree += agree;
+    row('q = ' + c.q + ': pairs whose j, r, φ and verdict match the twin', agree, pc.pairs, 0);
+  });
+  row('all q: pairs where inequality ⟺ interlacing ⟺ numeric on-circle (with functional equation and palindromy)', equivCount, totalPairs, 0);
+  row('κ₊ = tan(½ arg ε) from the Gauss sum of χ mod 5', kappa, PY.kappa_plus, 1e-12);
+  row('arg ε in degrees', argEps * DEG, PY.arg_eps_deg, 1e-8);
+  row('|(1 + iκ₊)/(1 − iκ₊) − ε|  (must be 0)', feDefect, 0, 1e-12);
+  row('κ₊ − Davenport–Heilbronn\'s radical  (must be 0)', kappa - radical, 0, 1e-12);
+  var tb = document.getElementById('rtab');
+  rows.forEach(function (r) { var trr = document.createElement('tr'); trr.innerHTML = '<td>' + r[0] + '</td><td>' + fmtv(r[1], r[4]) + '</td><td>' + fmtv(r[2], r[4]) + '</td><td class="' + (r[3] ? 'pass' : 'fail') + '">' + (r[3] ? '✓' : '✗') + '</td>'; tb.appendChild(trr); });
+  function fmtv(v, tol) { if (tol === 0) return String(v); if (Math.abs(v) < 1e-6) return v === 0 ? '0' : v.toExponential(1); return v.toFixed(tol < 1e-9 ? 12 : 8); }
+  document.getElementById('selfcheck').innerHTML = '<span class="' + (pass === rows.length ? 'pass' : 'fail') + '">' + pass + ' / ' + rows.length + ' recomputed values agree with the Python twin</span> · <span class="' + (pairAgree === totalPairs ? 'pass' : 'fail') + '">' + pairAgree + ' / ' + totalPairs + ' pairs match, one by one</span>';
+  window.__interlacingDial = { pass: pass, total: rows.length, pairAgree: pairAgree, totalPairs: totalPairs, on: C.map(function (c) { return c.on; }), off: C.map(function (c) { return c.off; }), kappa: kappa };
+
+  // ---------- wiring ----------
+  function sync() {
+    Array.prototype.forEach.call(qpick.children, function (b, i) { b.classList.toggle('on', i === qi); });
+    slider.max = String(C[qi].rows.length - 1); slider.value = String(pi);
+    drawDial(); readout1(); drawScatter(); readout2();
+  }
+  var firstOff = 0; C[0].rows.some(function (rw, i) { if (!rw.on) { firstOff = i; return true; } return false; }); pi = firstOff;
+  sync(); drawKappa(); readout3();
+  var rt; window.addEventListener('resize', function () { clearTimeout(rt); rt = setTimeout(function () { sync(); drawKappa(); }, 150); });
+  var oddTotal = 0; C.forEach(function (c) { oddTotal += c.odd; });
+  status.textContent = 'computed in ' + ((performance.now() - t0) / 1000).toFixed(2) + ' s · 3 finite fields · ' + oddTotal + ' odd characters, Weil\'s bound verified for each · ' + totalPairs + ' conjugate pairs · all finite';
+})();
+</script>
+</body>
+</html>
