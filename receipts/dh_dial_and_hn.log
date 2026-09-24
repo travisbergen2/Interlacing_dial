@@ -1,0 +1,119 @@
+==============================================================================
+A. THE DAVENPORT-HEILBRONN KAPPA DIAL
+==============================================================================
+Gauss sum tau            = (-1.17557050458495 + 1.90211303259031j)   |tau|^2 = 5.0
+root number eps          = (0.85065080835204 + 0.525731112119134j)   arg eps = 31.7174744115 deg
+kappa_+ = tan(arg eps/2) = 0.28407904384041229603
+kappa_DH (closed form)   = 0.28407904384041229603   |diff| = 1.97e-31
+kappa_- = -1/kappa_+     = -3.5201470213402019924   (the antisymmetric functional equation)
+(1+i k)/(1-i k) = eps at kappa_+ and = -eps at kappa_-  [checked to 1e-25]
+
+A2. Functional-equation test  |Lam(s) - Lam(1-s)| (even) and |Lam(s) + Lam(1-s)| (odd)
+  kappa_+ : even-defect   2.96e-31   odd-defect       1.52
+  kappa_- : even-defect       1.28   odd-defect   7.86e-31
+  kappa=0 : even-defect     0.0954   odd-defect       1.41
+  kappa=1 : even-defect       0.24   odd-defect        1.8
+  kappa = +i gives L(s,chi) exactly, kappa = -i gives L(s,chi-bar) exactly  [checked]
+  involution kappa -> -1/kappa: fixes +-i, swaps kappa_+ <-> kappa_-  [algebra: (1-ik)L+(1+ik)Lbar -> difference combination]
+
+A3. Multiplicativity: a(2)^2 - a(4) = kappa^2 + 1  -> zero only at kappa = +-i
+  kappa_+ : a(2)^2 - a(4) = 1.08070090315
+  kappa_- : a(2)^2 - a(4) = 13.3914350519
+  +i      : a(2)^2 - a(4) = (0.0 + 0.0j)
+
+    n   prime-power?   Lambda_f(n) at kappa_+       Lambda_f(n) at kappa=i (should be chi(n)Lambda(n))
+    2    yes         +0.196909                 +0.000000+0.693147i
+    3    yes         -0.312093                 +0.000000-1.098612i
+    4    yes         -1.442232                 -0.693147+0.000000i
+    5    yes         +0.000000                 +0.000000+0.000000i
+    6    NO          +1.936356                 -0.000000+0.000000i
+    7    yes         +0.552792                 +0.000000+1.945910i
+    8    yes         +0.015891                 +0.000000-0.693147i
+    9    yes         -2.285884                 -1.098612+0.000000i
+   10    NO          +0.000000                 +0.000000+0.000000i
+   11    yes         +2.397895                 +2.397895+0.000000i
+   12    NO          -0.762877                 +0.000000+0.000000i
+   13    yes         -0.728648                 +0.000000-2.564949i
+   14    NO          -2.852032                 +0.000000+0.000000i
+   15    NO          +0.000000                 +0.000000+0.000000i
+   16    yes         +1.381780                 +0.693147+0.000000i
+   17    yes         +0.804857                 +0.000000+2.833213i
+   18    NO          +0.887357                 +0.000000+0.000000i
+   19    yes         -2.944439                 -2.944439+0.000000i
+   20    NO          +0.000000                 +0.000000+0.000000i
+   21    NO          +3.290218                 +0.000000+0.000000i
+   22    NO          +0.000000                 +0.000000+0.000000i
+   23    yes         -0.890728                 +0.000000-3.135494i
+   24    NO          +0.277169                 -0.000000+0.000000i
+  Lambda_f(6) at kappa_+ = 1.936356 = (1 + kappa^2) log 6 = 1.936356
+  growth of max_{n<=N} |Lambda_f(n)|/log n at kappa_+ (for an Euler product this is <= 1):
+     N =   100:       1.3423
+     N =   400:       1.3767
+     N =  1000:       2.6847
+     N =  2000:       3.5752
+     N =  4000:       7.1504
+
+A4. Mirror orbit at the certified off-line zero (f_kappa_+ has real coefficients + functional equation)
+  |f(s0         )| =   9.84e-15    |L(chi)| = 0.70219735   |L(chi-bar)| = 0.70219735
+  |f(conj s0    )| =   9.84e-15    |L(chi)| = 0.70219735   |L(chi-bar)| = 0.70219735
+  |f(1 - s0     )| =   3.62e-14    |L(chi)| = 2.5834945   |L(chi-bar)| = 2.5834945
+  |f(1 - conj s0)| =   3.62e-14    |L(chi)| = 2.5834945   |L(chi-bar)| = 2.5834945
+  -> at a zero of f the two constituents have EQUAL modulus and opposite matched phase; neither vanishes.
+
+==============================================================================
+B. FUNCTION-FIELD TWIN: real matched mixtures of conjugate L-functions over F_q[T]
+==============================================================================
+
+  q = 3, modulus m = [1, 0, 2, 1] (low->high), unit group order 26, generator (0, 0, 2)
+  Weil's RH checked for all 25 nontrivial characters: odd ones have all 2 roots on |u| = q^-1/2; even ones have (1-u) times roots on the circle.
+    pair (chi_  1, chi_ 25): zero angles of L(chi)   117.01,  -111.39 deg | sin*sin = -0.830 | interlaced True  | mixture on circle True  | |roots| = 1.0000, 1.0000
+    pair (chi_  3, chi_ 23): zero angles of L(chi)  -151.99,   -36.24 deg | sin*sin = +0.278 | interlaced False | mixture on circle False | |roots| = 14.7563, 0.0678
+    pair (chi_  5, chi_ 21): zero angles of L(chi)     8.79,   159.17 deg | sin*sin = +0.054 | interlaced False | mixture on circle False | |roots| = 0.2147, 4.6579
+    pair (chi_  7, chi_ 19): zero angles of L(chi)  -166.75,   -84.28 deg | sin*sin = +0.228 | interlaced False | mixture on circle False | |roots| = 2.1168, 0.4724
+    pair (chi_  9, chi_ 17): zero angles of L(chi)    20.63,   -70.40 deg | sin*sin = -0.332 | interlaced True  | mixture on circle True  | |roots| = 1.0000, 1.0000
+    pair (chi_ 11, chi_ 15): zero angles of L(chi)   -43.49,   124.76 deg | sin*sin = -0.565 | interlaced True  | mixture on circle True  | |roots| = 1.0000, 1.0000
+  census q=3 d=3 (L-degree 2): 6 conjugate odd pairs | on-circle 3 | off-circle 3 | interlaced->on 3 | interlaced->off 0 | non-interlaced->on 0 | non-interlaced->off 3 | degree-2 criterion mismatches 0
+
+  q = 5, modulus m = [1, 0, 1, 1] (low->high), unit group order 124, generator (0, 0, 2)
+  Weil's RH checked for all 123 nontrivial characters: odd ones have all 2 roots on |u| = q^-1/2; even ones have (1-u) times roots on the circle.
+  census q=5 d=3 (L-degree 2): 46 conjugate odd pairs | on-circle 32 | off-circle 14 | interlaced->on 32 | interlaced->off 0 | non-interlaced->on 0 | non-interlaced->off 14 | degree-2 criterion mismatches 0
+
+  q = 7, modulus m = [1, 0, 1, 1] (low->high), unit group order 342, generator (0, 1, 5)
+  Weil's RH checked for all 341 nontrivial characters: odd ones have all 2 roots on |u| = q^-1/2; even ones have (1-u) times roots on the circle.
+  census q=7 d=3 (L-degree 2): 142 conjugate odd pairs | on-circle 99 | off-circle 43 | interlaced->on 99 | interlaced->off 0 | non-interlaced->on 0 | non-interlaced->off 43 | degree-2 criterion mismatches 0
+
+  q = 3, modulus m = [1, 0, 1, 1, 1] (low->high), unit group order 80, generator (0, 0, 1, 1)
+  Weil's RH checked for all 79 nontrivial characters: odd ones have all 3 roots on |u| = q^-1/2; even ones have (1-u) times roots on the circle.
+  census q=3 d=4 (L-degree 3): 20 conjugate odd pairs | on-circle 15 | off-circle 5 | interlaced->on 10 | interlaced->off 0 | non-interlaced->on 5 | non-interlaced->off 5
+
+  q = 5, modulus m = [1, 0, 1, 1, 1] (low->high), unit group order 624, generator (0, 0, 1, 1)
+  Weil's RH checked for all 623 nontrivial characters: odd ones have all 3 roots on |u| = q^-1/2; even ones have (1-u) times roots on the circle.
+  census q=5 d=4 (L-degree 3): 234 conjugate odd pairs | on-circle 171 | off-circle 63 | interlaced->on 110 | interlaced->off 0 | non-interlaced->on 61 | non-interlaced->off 63
+
+  q = 3, modulus m = [1, 0, 0, 0, 2, 1] (low->high), unit group order 242, generator (0, 0, 0, 0, 2)
+  Weil's RH checked for all 241 nontrivial characters: odd ones have all 4 roots on |u| = q^-1/2; even ones have (1-u) times roots on the circle.
+  census q=3 d=5 (L-degree 4): 60 conjugate odd pairs | on-circle 30 | off-circle 30 | interlaced->on 23 | interlaced->off 0 | non-interlaced->on 7 | non-interlaced->off 30
+
+==============================================================================
+C. PLANE-COLOURING ARITHMETIC
+==============================================================================
+C1. Rotation angles 2 arcsin(1/(2R)) move a point at distance R by exactly 1: cos = 1 - 1/(2R^2)
+  R^2 = 3  (Moser spindle):  cos = 5/6  = 0.833333333333, e^(i theta) = (5 + sqrt(-11))/6
+  R^2 = 4  (de Grey):        cos = 7/8  = 0.875000000000, e^(i theta) = (7 + sqrt(-15))/8
+  R^2 = 16 (de Grey):        cos = 31/32= 0.968750000000, e^(i theta) = (31 + 3 sqrt(-7))/32
+  identities checked to 1e-12:
+    (5+sqrt-11)/6  = -conj(alpha/alpha-bar),  alpha = (1+sqrt-11)/2, norm 3   [3 splits in Q(sqrt-11)]
+    (7+sqrt-15)/8  = -conj(beta/beta-bar),    beta  = (1+sqrt-15)/2, norm 4   [(beta) = p^2, p above 2 in Q(sqrt-15)]
+    (31+3sqrt-7)/32= -(gamma/gamma-bar)^4,    gamma = (1+sqrt-7)/2,  norm 2   [2 splits in Q(sqrt-7)]
+  i.e. each rotation is, up to a half-turn (a lattice symmetry) and a mirror, the angle pi/pi-bar of an ideal of norm R^2.
+
+C2. The hexagonal 7-colouring is Z[omega] mod (3 + omega), an ideal of norm 7
+  Eisenstein norms that occur: [0, 1, 3, 4, 7, 9, 12, 13, 16, 19, 21, 25] ...  (5 and 6 do NOT occur: 2 is inert)
+  minimal squared lattice distance between same-coloured centres = 7  (= N(3+omega))
+  admissible hexagon circumradius r in (0.3872, 0.5000): diameter 2r < 1 and same-colour tiles >= sqrt(21) r - 2r > 1
+  e.g. r = 0.45: diameter 0.90 < 1, same-colour separation >= 1.1622 > 1  -> a valid 7-colouring
+  a norm-N Eisenstein ideal works iff sqrt(3N) > 4, i.e. N > 5.333: N = 7 is the first norm that occurs -> 7 colours
+  square tiles on Z[i]: need N > 8; Gaussian norms [0, 1, 2, 4, 5, 8, 9, 10, 13, 16] -> N = 9 = 3^2 (3 inert): 9 colours, the classical square-grid count
+  lattice unit-distance graphs themselves: Z[i] mod (1+i) -> 2 colours; Z[omega] mod (1-omega) -> 3 colours.
+
+ALL ASSERTS PASSED; json written.
