@@ -1,0 +1,34 @@
+max |Im Z|/|Z| at test points = 1.67e-17  (must be ~1e-15)
+grid of 801 points computed
+
+ordinate      which L-function vanishes there      interlacing
+   78.3159   chibar                                   
+   79.2662   chi                                      
+   80.2961   chibar                                   
+   80.4100   chi                                      
+   81.6603   chi                                      <-- two in a row: interlacing FAILS between 80.410 and 81.660
+   82.1282   chibar                                   
+   82.9967   chi                                      
+   83.3818   chibar                                   
+   84.8316   chibar                                   <-- two in a row: interlacing FAILS between 83.382 and 84.832
+   85.4024   chibar                                   <-- two in a row: interlacing FAILS between 84.832 and 85.402
+   85.6600   chi                                      
+   86.6810   chi                                      <-- two in a row: interlacing FAILS between 85.660 and 86.681
+   87.5798   chibar                                   
+   87.8816   chi                                      
+   89.1241   chi                                      <-- two in a row: interlacing FAILS between 87.882 and 89.124
+   89.6515   chibar                                   
+   90.6810   chi                                      
+   90.8030   chibar                                   
+   91.8959   chibar                                   <-- two in a row: interlacing FAILS between 90.803 and 91.896
+   92.3657   chi                                      
+   93.7199   chibar                                   
+   93.8186   chi                                      
+
+interlacing failures in [78.0, 94.0]: [(80.41001319144355, 81.6603212751131), (83.38180251861458, 84.83164808565722), (84.83164808565722, 85.40238572830957), (85.66001486103238, 86.68096632002107), (87.88163609495298, 89.12409319498882), (90.80299880420722, 91.8958712272431)]
+on-line zeros of the EVEN D-H function (Z_chi(t)+Z_chi(-t)): [78.7174, 80.3279, 81.9254, 83.1088, 87.6475, 89.4392, 90.7245, 92.1827, 93.7809]
+on-line zeros of the ODD  D-H function (Z_chi(t)-Z_chi(-t)): [80.2285, 82.7369, 85.57, 87.4763, 90.5248, 92.9208, 93.9403]
+
+at the off-line ordinate t = 85.6993484853776: |Z_chi(t)| = 6.61424e-30, |Z_chi(-t)| = 3.56326e-29, ratio = 0.185623
+equal-amplitude crossings |Z_chi(t)| = |Z_chi(-t)| in the window: [78.71, 80.23, 80.33, 81.93, 82.73, 83.11, 85.57, 87.47, 87.65, 89.43, 90.53, 90.73, 92.19, 92.93, 93.79, 93.95]
+done
